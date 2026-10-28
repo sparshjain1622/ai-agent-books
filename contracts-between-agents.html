@@ -1,0 +1,510 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="author" content="Sparsh Jain"><title>Contracts Between Agents</title>
+<style>@import url('https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=Inter:wght@400;600;800&display=swap');
+@page { size: 6in 9in; margin: 0.8in 0.7in 0.85in 0.75in;
+  @bottom-center { content: counter(page); font: 9pt Inter, sans-serif; color: #8a8f98; } }
+@page :first { margin: 0; @bottom-center { content: none; } }
+* { box-sizing: border-box; }
+html { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+body { margin: 0; font: 10.6pt/1.58 'Source Serif 4', Georgia, serif; color: #1d2a3a; background: #fff; }
+h1, h2, h3, .kicker, .tn, figcaption, .callout b, table th { font-family: Inter, sans-serif; }
+
+.cover { height: 9in; width: 6in; background: #1d2a3a; color: #f4ece2; padding: 1.1in 0.7in; position: relative; page-break-after: always; }
+.cover .kicker { font-size: 9pt; letter-spacing: .2em; text-transform: uppercase; color: #e08a5f; }
+.cover .ct { font-size: 30pt; line-height: 1.08; margin: .35in 0 .2in; font-weight: 800; }
+.cover .cs { font-size: 12.5pt; font-style: italic; opacity: .9; }
+.cover .cbar { width: 1in; height: 4px; background: #c2562b; margin: .5in 0 .3in; }
+.cover .ca { position: absolute; bottom: 1in; font: 600 13pt Inter, sans-serif; }
+.cover .ca span { font-weight: 400; font-size: 10pt; opacity: .75; }
+
+.front { page-break-after: always; padding-top: 4in; font-size: 8.5pt; color: #6b7280; }
+.toc { page-break-after: always; }
+.toc h2, .about h2 { font-size: 20pt; margin: 0 0 .3in; }
+.toc ol { list-style: none; padding: 0; margin: 0; }
+.toc li { display: flex; gap: 14px; padding: 7px 0; border-bottom: 1px dotted #c9c3b8; font-size: 10.5pt; }
+.toc .tn { color: #c2562b; font-weight: 600; min-width: 64px; font-size: 9pt; padding-top: 2px; }
+
+.chapter { page-break-before: always; }
+.chapter > .num { font: 600 9pt Inter, sans-serif; letter-spacing: .18em; text-transform: uppercase; color: #c2562b; margin-top: .3in; }
+.chapter > h1 { font-size: 21pt; line-height: 1.15; margin: .08in 0 .12in; font-weight: 800; }
+.chapter > .lede { font-style: italic; font-size: 11.5pt; color: #4b5563; border-bottom: 2px solid #c2562b; padding-bottom: .18in; margin-bottom: .25in; }
+h2 { font-size: 13pt; margin: .3in 0 .08in; break-after: avoid; }
+h3 { font-size: 10.8pt; margin: .2in 0 .04in; color: #c2562b; break-after: avoid; }
+p { margin: 0 0 .1in; text-align: justify; hyphens: auto; orphans: 3; widows: 3; }
+ul, ol { margin: 0 0 .12in; padding-left: .25in; }
+li { margin-bottom: .04in; }
+
+.callout { background: #f4ece2; border-left: 4px solid #c2562b; padding: .12in .16in; margin: .16in 0; break-inside: avoid; font-size: 10pt; }
+.callout b { display: block; font-size: 8.5pt; letter-spacing: .12em; text-transform: uppercase; color: #c2562b; margin-bottom: 3px; }
+.callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+.quote { font-size: 13pt; font-style: italic; text-align: center; margin: .25in .2in; color: #c2562b; break-inside: avoid; }
+
+figure.dg { margin: .18in 0; break-inside: avoid; }
+figure.dg svg { width: 100%; height: auto; font-family: Inter, sans-serif; }
+figcaption { font-size: 8.3pt; color: #6b7280; text-align: center; margin-top: -0.08in; margin-bottom: .16in; }
+
+table { width: 100%; border-collapse: collapse; font-size: 9pt; margin: .14in 0; }
+tr { break-inside: avoid; }
+th { background: #1d2a3a; color: #fff; text-align: left; padding: 5px 7px; font-size: 8.4pt; }
+td { padding: 5px 7px; border-bottom: 1px solid #e3ddd3; vertical-align: top; }
+tr:nth-child(even) td { background: #faf6f0; }
+pre { background: #1d2a3a; color: #f4ece2; font: 8.4pt/1.45 Consolas, monospace; padding: .12in; border-radius: 4px; white-space: pre-wrap; break-inside: avoid; }
+.check li { list-style: "☐  "; }
+.about { page-break-before: always; }
+
+@media screen {
+  body { background: #f7f3ec; font-size: 18px; }
+  section { max-width: 720px; margin: 0 auto; background: #fff; padding: 48px 40px; }
+  .cover { width: auto; height: auto; min-height: 70vh; max-width: 720px; margin: 0 auto; padding: 80px 40px; }
+  .cover .ca { position: static; margin-top: 60px; }
+  .front { padding-top: 24px; }
+  .chapter { border-top: 1px solid #eadfce; }
+  .toc a { color: inherit; text-decoration: none; display: flex; gap: 14px; width: 100%; }
+  .topbar { position: sticky; top: 0; z-index: 5; background: #1d2a3a; color: #f4ece2; font: 600 14px Inter, sans-serif; display: flex; justify-content: space-between; align-items: center; padding: 10px 16px; }
+  .topbar a { color: #f4ece2; text-decoration: none; }
+  .topbar .dl { background: #c2562b; padding: 6px 12px; border-radius: 4px; }
+  pre { overflow-x: auto; }
+  table { display: block; overflow-x: auto; }
+  @media (max-width: 600px) { body { font-size: 16.5px; } section, .cover { padding: 32px 16px; } p { text-align: left; } }
+}
+@media print { .topbar { display: none; } }
+</style></head><body><div class="topbar"><a href="index.html">&larr; All books</a><a class="dl" href="Contracts-Between-Agents_Sparsh-Jain.pdf" download>Download PDF</a></div>
+<section class="cover"><div class="kicker">Field Guide · Multi-Agent Engineering</div><h1 class="ct">Contracts Between Agents</h1>
+<p class="cs">How to build one product with many AI agents, without them breaking each other's work</p><div class="cbar"></div><p class="ca">Sparsh Jain<br><span>AI Engineer</span></p></section>
+<section class="front"><p class="copy">Contracts Between Agents<br>© 2026 Sparsh Jain. All rights reserved.<br><br>First edition, October 2026.<br><br>This book shares general engineering lessons. All examples are generalized and anonymized; no client, company or product details are disclosed.<br><br>You may quote short passages with attribution.</p></section>
+<section class="toc"><h2>Contents</h2><ol><li><a href="#ch1"><span class="tn">Preface</span><span class="tt">The Day Two Agents Disagreed</span></a></li><li><a href="#ch2"><span class="tn">Chapter 1</span><span class="tt">The New Team: Many Agents, One Product</span></a></li><li><a href="#ch3"><span class="tn">Chapter 2</span><span class="tt">How Agents Break Each Other's Work</span></a></li><li><a href="#ch4"><span class="tn">Chapter 3</span><span class="tt">What a Cross-Agent Contract Is</span></a></li><li><a href="#ch5"><span class="tn">Chapter 4</span><span class="tt">The Instruction File: Your Team's Constitution</span></a></li><li><a href="#ch6"><span class="tn">Chapter 5</span><span class="tt">Ownership and Boundaries</span></a></li><li><a href="#ch7"><span class="tn">Chapter 6</span><span class="tt">Writing Good Contracts</span></a></li><li><a href="#ch8"><span class="tn">Chapter 7</span><span class="tt">Hand-offs and Integration</span></a></li><li><a href="#ch9"><span class="tn">Chapter 8</span><span class="tt">Making Contracts Enforce Themselves</span></a></li><li><a href="#ch10"><span class="tn">Chapter 9</span><span class="tt">Case Walkthrough: One Field, Three Spellings</span></a></li><li><a href="#ch11"><span class="tn">Chapter 10</span><span class="tt">Changing a Contract Safely</span></a></li><li><a href="#ch12"><span class="tn">Chapter 11</span><span class="tt">The Playbook</span></a></li><li><a href="#ch13"><span class="tn">Appendix</span><span class="tt">Contract Template and Glossary</span></a></li></ol></section>
+<section class="chapter" id="ch1" data-num="Preface">
+<div class="num">Preface</div>
+<h1>The Day Two Agents Disagreed</h1>
+<p class="lede">The bug was tiny. One agent wrote a value as "Female". Another expected "women". A third filled in nothing at all. Every agent had done its own job correctly. The product was still broken.</p>
+<p>I was building a multi-part product: a customer app, an admin portal, a set of shared documents and templates. Several AI coding agents worked in parallel. One owned the event-creation form. Another owned the listing screen. A third built filters and reports. Each was fast and capable, and none of them could see what the others had decided.</p>
+<p>A single field, describing who an event was meant for, ended up with three different spellings across three parts of the system. Filters silently returned nothing. Reports undercounted. Nothing crashed, which made it worse.</p>
+<p>The fix wasn't a smarter model. It was something human engineering teams worked out decades ago: <b>a contract</b>. A short, written, shared agreement that said <em>this field has exactly these three values, this is the default, and every part of the system must use them</em>. Once that contract existed in a place every agent read, the problem disappeared and stayed gone.</p>
+<p>This book is about that idea, scaled up. When several AI agents build one product, they need the same things human teams need: clear ownership, shared definitions, explicit hand-offs and automatic checks. Agents need them even more, because they are faster than humans, more confident than humans, and they forget everything between sessions.</p>
+<h2>Who should read this</h2>
+<ul>
+<li><b>Engineers and tech leads</b> running more than one coding agent on the same codebase.</li>
+<li><b>Founders and product owners</b> who direct agents to build their products and want fewer mysterious regressions.</li>
+<li><b>Anyone curious</b> about how "agent teams" actually work in practice. The ideas are explained with plain-language diagrams before any code appears.</li>
+</ul>
+<div class="callout"><b>A note on examples</b><p>All examples are generalized. Field names and scenarios are illustrative, and no project, client or product details are disclosed.</p></div>
+</section>
+
+<section class="chapter" id="ch2" data-num="Chapter 1">
+<div class="num">Chapter 1</div>
+<h1>The New Team: Many Agents, One Product</h1>
+<p class="lede">Running several AI agents on one product isn't science fiction any more. It's an everyday workflow, and it comes with a new kind of coordination problem.</p>
+
+<h2>Why teams of agents happen</h2>
+<p>A single agent working on a large product hits limits quickly. Its context fills up, its attention spreads thin, and one long session becomes slow and fragile. The natural answer is to split the work: one agent per feature, per screen, per service, or per role (builder, reviewer, tester). Agents can run in parallel, often in separate working copies of the code, and finish in an afternoon what one agent would take days to do.</p>
+
+<figure class="dg"><svg viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#c2562b"/></marker></defs><line x1="210.0" y1="130.0" x2="210.0" y2="35.0" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="158.0" y="15.0" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="39.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Frontend agent</text><line x1="210.0" y1="130.0" x2="344.233937586588" y2="82.5" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="292.233937586588" y="62.5" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="344.233937586588" y="79.5" text-anchor="middle" font-size="11" fill="#1d2a3a">Admin portal</text><text x="344.233937586588" y="93.5" text-anchor="middle" font-size="11" fill="#1d2a3a">agent</text><line x1="210.0" y1="130.0" x2="344.233937586588" y2="177.5" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="292.233937586588" y="157.5" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="344.233937586588" y="181.5" text-anchor="middle" font-size="11" fill="#1d2a3a">API agent</text><line x1="210.0" y1="130.0" x2="210.0" y2="225.0" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="158.0" y="205.0" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="229.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Templates agent</text><line x1="210.0" y1="130.0" x2="75.76606241341204" y2="177.50000000000003" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="23.766062413412044" y="157.50000000000003" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="75.76606241341204" y="181.50000000000003" text-anchor="middle" font-size="11" fill="#1d2a3a">Test agent</text><line x1="210.0" y1="130.0" x2="75.76606241341202" y2="82.49999999999999" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="23.766062413412016" y="62.499999999999986" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="75.76606241341202" y="86.49999999999999" text-anchor="middle" font-size="11" fill="#1d2a3a">Review agent</text><rect x="148.0" y="104.0" width="124" height="52" rx="8" fill="#1d2a3a" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="134.0" text-anchor="middle" font-size="11" fill="#fff">One product</text></svg></figure>
+<figcaption>Figure 1.1: A typical agent team. Each agent is strong in its own area and blind to the others by default.</figcaption>
+
+<h2>What's different about agent teammates</h2>
+<table>
+<tr><th>Trait</th><th>Human teammate</th><th>Agent teammate</th></tr>
+<tr><td>Memory</td><td>Remembers last week's decisions</td><td>Starts each session fresh unless told</td></tr>
+<tr><td>Hallway knowledge</td><td>Overhears, asks, notices</td><td>Knows only what's in its context</td></tr>
+<tr><td>Speed</td><td>Hours per feature</td><td>Minutes per feature</td></tr>
+<tr><td>Confidence</td><td>Says "not sure, let me check"</td><td>Often fills gaps with plausible guesses</td></tr>
+<tr><td>Consistency</td><td>Habits drift slowly</td><td>Follows written rules very consistently</td></tr>
+</table>
+<p>That last row is the opportunity. Agents are bad at <em>implicit</em> agreements and very good at <em>explicit</em> ones. Write the agreement down where they'll read it, and they follow it better than most humans do.</p>
+
+<h2>The coordination problem in one picture</h2>
+<figure class="dg"><svg viewBox="0 0 420 84" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#c2562b"/></marker></defs><rect x="0.0" y="10" width="69.6" height="64" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="34.8" y="25.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Agent A</text><text x="34.8" y="39.0" text-anchor="middle" font-size="11" fill="#1d2a3a">makes a</text><text x="34.8" y="53.0" text-anchor="middle" font-size="11" fill="#1d2a3a">local</text><text x="34.8" y="67.0" text-anchor="middle" font-size="11" fill="#1d2a3a">decision</text><line x1="70.6" y1="42" x2="86.6" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="87.6" y="10" width="69.6" height="64" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="122.39999999999999" y="25.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Decision</text><text x="122.39999999999999" y="39.0" text-anchor="middle" font-size="11" fill="#1d2a3a">is never</text><text x="122.39999999999999" y="53.0" text-anchor="middle" font-size="11" fill="#1d2a3a">written</text><text x="122.39999999999999" y="67.0" text-anchor="middle" font-size="11" fill="#1d2a3a">down</text><line x1="158.2" y1="42" x2="174.2" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="175.2" y="10" width="69.6" height="64" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="25.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Agent B</text><text x="210.0" y="39.0" text-anchor="middle" font-size="11" fill="#1d2a3a">makes a</text><text x="210.0" y="53.0" text-anchor="middle" font-size="11" fill="#1d2a3a">different</text><text x="210.0" y="67.0" text-anchor="middle" font-size="11" fill="#1d2a3a">one</text><line x1="245.79999999999998" y1="42" x2="261.79999999999995" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="262.79999999999995" y="10" width="69.6" height="64" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="297.59999999999997" y="39.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Both are</text><text x="297.59999999999997" y="53.0" text-anchor="middle" font-size="11" fill="#1d2a3a">&quot;correct&quot;</text><line x1="333.4" y1="42" x2="349.4" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="350.4" y="10" width="69.6" height="64" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="385.2" y="39.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Product</text><text x="385.2" y="53.0" text-anchor="middle" font-size="11" fill="#1d2a3a">is broken</text></svg></figure>
+<figcaption>Figure 1.2: How agent teams drift apart. Nobody did anything wrong, and the product still broke.</figcaption>
+<p>Every chapter that follows is a way to break this chain at the second box: make sure decisions that affect more than one agent get written down, in a form other agents can find, read and be checked against.</p>
+</section>
+
+<section class="chapter" id="ch3" data-num="Chapter 2">
+<div class="num">Chapter 2</div>
+<h1>How Agents Break Each Other's Work</h1>
+<p class="lede">Before designing contracts, you need to recognize the failures they prevent. These are the six I saw most often.</p>
+
+<h2>1. Vocabulary drift</h2>
+<p>The same concept gets different names or values: <i>female / women / F</i>, <i>cancelled / canceled</i>, <i>startDate / start_date / eventStart</i>. Each choice is reasonable on its own, and together they're incompatible. This was the most common failure by far.</p>
+
+<h2>2. Shape drift</h2>
+<p>One agent stores a price as a number in rupees, another as a string with a currency symbol, a third in the smallest unit. One stores a date as a local date, another as a timestamp. Data flows, but meaning doesn't.</p>
+
+<h2>3. Silent defaults</h2>
+<p>When a value is missing, what should happen? One agent treats "missing" as "everyone", another as "nobody", a third throws an error. Unstated defaults are the most dangerous form of drift, because they only show up on edge cases.</p>
+
+<h2>4. Overlapping edits</h2>
+<p>Two agents edit the same file or component at once. One "cleans up" what the other just built. Without clear ownership, parallel agents can undo each other in minutes.</p>
+
+<h2>5. Ghost decisions</h2>
+<p>A decision is made in one agent's conversation ("let's make that field required") and dies with that session. The next agent, or the same agent tomorrow, never learns about it.</p>
+
+<h2>6. Confident integration</h2>
+<p>An agent integrates with another part of the system by <em>assuming</em> how it works rather than reading it. The code looks right, compiles, and calls an endpoint or field that doesn't exist.</p>
+
+<figure class="dg"><svg viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#c2562b"/></marker></defs><line x1="210.0" y1="130.0" x2="210.0" y2="35.0" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="158.0" y="15.0" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="32.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Vocabulary</text><text x="210.0" y="46.0" text-anchor="middle" font-size="11" fill="#1d2a3a">drift</text><line x1="210.0" y1="130.0" x2="344.233937586588" y2="82.5" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="292.233937586588" y="62.5" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="344.233937586588" y="86.5" text-anchor="middle" font-size="11" fill="#1d2a3a">Shape drift</text><line x1="210.0" y1="130.0" x2="344.233937586588" y2="177.5" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="292.233937586588" y="157.5" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="344.233937586588" y="181.5" text-anchor="middle" font-size="11" fill="#1d2a3a">Silent defaults</text><line x1="210.0" y1="130.0" x2="210.0" y2="225.0" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="158.0" y="205.0" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="222.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Overlapping</text><text x="210.0" y="236.0" text-anchor="middle" font-size="11" fill="#1d2a3a">edits</text><line x1="210.0" y1="130.0" x2="75.76606241341204" y2="177.50000000000003" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="23.766062413412044" y="157.50000000000003" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="75.76606241341204" y="181.50000000000003" text-anchor="middle" font-size="11" fill="#1d2a3a">Ghost decisions</text><line x1="210.0" y1="130.0" x2="75.76606241341202" y2="82.49999999999999" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="23.766062413412016" y="62.499999999999986" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="75.76606241341202" y="79.49999999999999" text-anchor="middle" font-size="11" fill="#1d2a3a">Confident</text><text x="75.76606241341202" y="93.49999999999999" text-anchor="middle" font-size="11" fill="#1d2a3a">integration</text><rect x="148.0" y="104.0" width="124" height="52" rx="8" fill="#1d2a3a" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="127.0" text-anchor="middle" font-size="11" fill="#fff">Agent team</text><text x="210.0" y="141.0" text-anchor="middle" font-size="11" fill="#fff">failures</text></svg></figure>
+<figcaption>Figure 2.1: The six failure modes. All six come down to a decision that wasn't shared.</figcaption>
+
+<div class="callout"><b>The common root</b><p>Every failure above has the same cause: a decision that affects more than one agent lives in only one agent's head. The cure is the same each time too: move that decision into a shared, written, checkable place.</p></div>
+</section>
+
+<section class="chapter" id="ch4" data-num="Chapter 3">
+<div class="num">Chapter 3</div>
+<h1>What a Cross-Agent Contract Is</h1>
+<p class="lede">A cross-agent contract is a small, explicit, shared agreement about something more than one agent touches. It's short enough to read in a minute and strict enough to be checked by a machine.</p>
+
+<h2>The definition</h2>
+<p><b>A cross-agent contract states, for one shared concept: its name, its exact allowed values or shape, its default, who owns it, and how it is checked.</b></p>
+<p>That's all. A contract isn't a design document or a specification of a whole feature. It's the narrow interface where different agents' work meets.</p>
+
+<h2>Anatomy of a contract</h2>
+<pre>CONTRACT: event.audience
+Owner:     Event data (admin portal agent)
+Used by:   Event form, listing screen, filters, reports
+Values:    EXACTLY one of: "women" | "men" | "anyone"
+Default:   "anyone"  (when missing, null or unknown)
+Display:   "Women only" | "Men only" | "Open to all"
+Rules:     Store the value, never the display label.
+           Never invent new values; propose a contract change.
+Checked by: shared type + validation + test (see §8)
+Changed:   2026-10 — initial agreement</pre>
+
+<figure class="dg"><svg viewBox="0 0 420 84" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#c2562b"/></marker></defs><rect x="0.0" y="10" width="69.6" height="64" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="34.8" y="46.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Name</text><line x1="70.6" y1="42" x2="86.6" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="87.6" y="10" width="69.6" height="64" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="122.39999999999999" y="32.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Allowed</text><text x="122.39999999999999" y="46.0" text-anchor="middle" font-size="11" fill="#1d2a3a">values /</text><text x="122.39999999999999" y="60.0" text-anchor="middle" font-size="11" fill="#1d2a3a">shape</text><line x1="158.2" y1="42" x2="174.2" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="175.2" y="10" width="69.6" height="64" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="46.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Default</text><line x1="245.79999999999998" y1="42" x2="261.79999999999995" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="262.79999999999995" y="10" width="69.6" height="64" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="297.59999999999997" y="39.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Owner &amp;</text><text x="297.59999999999997" y="53.0" text-anchor="middle" font-size="11" fill="#1d2a3a">users</text><line x1="333.4" y1="42" x2="349.4" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="350.4" y="10" width="69.6" height="64" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="385.2" y="39.0" text-anchor="middle" font-size="11" fill="#1d2a3a">How it&#x27;s</text><text x="385.2" y="53.0" text-anchor="middle" font-size="11" fill="#1d2a3a">checked</text></svg></figure>
+<figcaption>Figure 3.1: The five parts of every contract.</figcaption>
+
+<h2>Why each part matters</h2>
+<h3>Name</h3>
+<p>One canonical name, with its exact path in the data. Aliases are where vocabulary drift starts.</p>
+<h3>Allowed values or shape</h3>
+<p>The word <b>"exactly"</b> is doing a lot of work. A closed list ("exactly these three") can be enforced. An open description ("a gender-like value") can't.</p>
+<h3>Default</h3>
+<p>Say what "missing" means. In the opening story, choosing <i>"anyone"</i> as the default meant old records with no value kept showing up in listings instead of vanishing.</p>
+<h3>Owner and users</h3>
+<p>The owner is the only agent (or person) allowed to change the contract. Users must follow it. Listing the users means you know who to notify when it changes.</p>
+<h3>How it's checked</h3>
+<p>A contract no machine checks is a suggestion. Chapter 8 shows how to make every contract enforce itself.</p>
+
+<h2>Store the value, display the label</h2>
+<p>One rule deserves special attention: <b>separate the stored value from the displayed text.</b> Agents love to "improve" labels: "Women only" becomes "Ladies" in one screen and "Female travellers" in another. That's fine for display, and disastrous if those labels leak into stored data. The contract fixes the stored value, while display labels can be adjusted freely in one mapping.</p>
+</section>
+
+<section class="chapter" id="ch5" data-num="Chapter 4">
+<div class="num">Chapter 4</div>
+<h1>The Instruction File: Your Team's Constitution</h1>
+<p class="lede">Agents read before they act, but only what you put in front of them. The project instruction file is the one document every agent reads at the start of every session.</p>
+
+<h2>What it is</h2>
+<p>Most modern coding agents automatically load a plain-text instruction file from the root of a project, often named something like <i>AGENTS.md</i> or a tool-specific equivalent. Whatever is in that file becomes part of every session's starting context. For an agent team, it's the closest thing you have to a shared memory and a shared rulebook.</p>
+
+<figure class="dg"><svg viewBox="0 0 420 84" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#c2562b"/></marker></defs><rect x="0.0" y="10" width="69.6" height="64" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="34.8" y="39.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Session</text><text x="34.8" y="53.0" text-anchor="middle" font-size="11" fill="#1d2a3a">starts</text><line x1="70.6" y1="42" x2="86.6" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="87.6" y="10" width="69.6" height="64" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="122.39999999999999" y="25.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Agent</text><text x="122.39999999999999" y="39.0" text-anchor="middle" font-size="11" fill="#1d2a3a">reads</text><text x="122.39999999999999" y="53.0" text-anchor="middle" font-size="11" fill="#1d2a3a">instruction</text><text x="122.39999999999999" y="67.0" text-anchor="middle" font-size="11" fill="#1d2a3a">file</text><line x1="158.2" y1="42" x2="174.2" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="175.2" y="10" width="69.6" height="64" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="18.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Agent</text><text x="210.0" y="32.0" text-anchor="middle" font-size="11" fill="#1d2a3a">reads</text><text x="210.0" y="46.0" text-anchor="middle" font-size="11" fill="#1d2a3a">contracts</text><text x="210.0" y="60.0" text-anchor="middle" font-size="11" fill="#1d2a3a">it</text><text x="210.0" y="74.0" text-anchor="middle" font-size="11" fill="#1d2a3a">touches</text><line x1="245.79999999999998" y1="42" x2="261.79999999999995" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="262.79999999999995" y="10" width="69.6" height="64" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="297.59999999999997" y="39.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Agent</text><text x="297.59999999999997" y="53.0" text-anchor="middle" font-size="11" fill="#1d2a3a">works</text><line x1="333.4" y1="42" x2="349.4" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="350.4" y="10" width="69.6" height="64" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="385.2" y="25.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Agent</text><text x="385.2" y="39.0" text-anchor="middle" font-size="11" fill="#1d2a3a">records</text><text x="385.2" y="53.0" text-anchor="middle" font-size="11" fill="#1d2a3a">new</text><text x="385.2" y="67.0" text-anchor="middle" font-size="11" fill="#1d2a3a">decisions</text></svg></figure>
+<figcaption>Figure 4.1: The session ritual. The first two steps are what keep agents aligned.</figcaption>
+
+<h2>What belongs in it</h2>
+<table>
+<tr><th>Section</th><th>Contents</th></tr>
+<tr><td>Product in brief</td><td>What the product is and who it serves, in five lines</td></tr>
+<tr><td>Map of the code</td><td>Main folders and what lives where</td></tr>
+<tr><td>Ownership</td><td>Which agent or person owns which area (Chapter 5)</td></tr>
+<tr><td>Contracts index</td><td>A list of every contract with a one-line summary and a link</td></tr>
+<tr><td>Conventions</td><td>Naming, formatting, error handling, dates, money</td></tr>
+<tr><td>How to verify</td><td>Commands to build, test and check contracts</td></tr>
+<tr><td>Decision log</td><td>Short dated entries of choices that affect everyone</td></tr>
+<tr><td>Never do</td><td>Red lines: e.g. never edit another area's files, never change a contract unilaterally</td></tr>
+</table>
+
+<h2>Keep it short, link out</h2>
+<p>A ten-page instruction file gets skimmed by agents just as it does by humans, and it eats context on every session. Keep the root file to one or two pages. Put each contract in its own small file, and let the root file index them. Agents then load the detail only when they touch that area.</p>
+<pre>/AGENTS.md                ← 1–2 pages, read every session
+/contracts/
+    event-audience.md     ← one contract per file
+    money.md
+    dates-and-timezones.md
+    booking-status.md
+/docs/decisions.md        ← dated decision log</pre>
+
+<div class="callout"><b>Lesson learned</b><p>Early on, I let each agent keep its own notes. Within a week there were four slightly different versions of the truth. Moving to one root file plus one-contract-per-file ended that. The rule is simple: if it affects more than one agent, it lives in the shared files, nowhere else.</p></div>
+
+<h2>The decision log</h2>
+<p>Ghost decisions (Chapter 2) die here. Whenever an agent or a human makes a choice that other parts of the system depend on, it gets one dated line in the log: what was decided, why, and which contract it touches. Ask every agent to end its session by adding to the log if it made such a decision. It takes seconds and saves hours.</p>
+<pre>2026-10-12  Prices stored as integer minor units. (contract: money)
+2026-10-19  Event audience limited to 3 values, default "anyone".
+            (contract: event-audience) Replaces free-text field.
+2026-10-23  All dates stored in UTC; displayed in local time.</pre>
+</section>
+
+<section class="chapter" id="ch6" data-num="Chapter 5">
+<div class="num">Chapter 5</div>
+<h1>Ownership and Boundaries</h1>
+<p class="lede">Parallel agents are only safe when each one knows exactly where its territory ends. Ownership turns "who changed this?" into a question you never have to ask.</p>
+
+<h2>Draw the map</h2>
+<p>Before you start parallel work, split the product into areas with clear edges: by app (customer app, admin portal), by layer (interface, API, data), or by feature. Assign each area exactly one owner. Shared territory, such as common components, types and contracts, gets its own owner too, often you.</p>
+
+<figure class="dg"><svg viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#c2562b"/></marker></defs><line x1="210.0" y1="130.0" x2="210.0" y2="35.0" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="158.0" y="15.0" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="39.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Customer app</text><line x1="210.0" y1="130.0" x2="357.4137600257488" y2="100.64338553438" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="305.4137600257488" y="80.64338553438" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="357.4137600257488" y="104.64338553438" text-anchor="middle" font-size="11" fill="#1d2a3a">Admin portal</text><line x1="210.0" y1="130.0" x2="301.10671410533337" y2="206.85661446562" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="249.10671410533337" y="186.85661446562" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="301.10671410533337" y="210.85661446562" text-anchor="middle" font-size="11" fill="#1d2a3a">API layer</text><line x1="210.0" y1="130.0" x2="118.89328589466668" y2="206.85661446562" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="66.89328589466668" y="186.85661446562" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="118.89328589466668" y="203.85661446562" text-anchor="middle" font-size="11" fill="#1d2a3a">Templates &amp;</text><text x="118.89328589466668" y="217.85661446562" text-anchor="middle" font-size="11" fill="#1d2a3a">documents</text><line x1="210.0" y1="130.0" x2="62.586239974251185" y2="100.64338553438" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="10.586239974251185" y="80.64338553438" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="62.586239974251185" y="104.64338553438" text-anchor="middle" font-size="11" fill="#1d2a3a">Reports</text><rect x="148.0" y="104.0" width="124" height="52" rx="8" fill="#1d2a3a" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="120.0" text-anchor="middle" font-size="11" fill="#fff">Shared core</text><text x="210.0" y="134.0" text-anchor="middle" font-size="11" fill="#fff">(contracts,</text><text x="210.0" y="148.0" text-anchor="middle" font-size="11" fill="#fff">types)</text></svg></figure>
+<figcaption>Figure 5.1: Areas with single owners around a shared core. Only the core's owner changes the core.</figcaption>
+
+<h2>Three rules of territory</h2>
+<ol>
+<li><b>Write only in your area.</b> An agent may read anything but changes only files in its own area.</li>
+<li><b>Request, don't reach.</b> If you need a change in someone else's area, write a request (a note, an issue, a message to the owner) instead of editing it yourself.</li>
+<li><b>The shared core changes by proposal.</b> Contracts and shared types change only through the owner, with all users informed.</li>
+</ol>
+
+<h2>Physical isolation helps</h2>
+<p>Many agent tools can give each agent its own isolated working copy of the code, on its own branch. That makes overlapping edits impossible during work and pushes conflicts to a clear, reviewable moment: the merge. Combine isolation with ownership and the most chaotic failure mode, agents overwriting each other, mostly disappears.</p>
+
+<figure class="dg"><svg viewBox="0 0 420 84" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#c2562b"/></marker></defs><rect x="0.0" y="10" width="69.6" height="64" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="34.8" y="25.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Each</text><text x="34.8" y="39.0" text-anchor="middle" font-size="11" fill="#1d2a3a">agent on</text><text x="34.8" y="53.0" text-anchor="middle" font-size="11" fill="#1d2a3a">own</text><text x="34.8" y="67.0" text-anchor="middle" font-size="11" fill="#1d2a3a">branch</text><line x1="70.6" y1="42" x2="86.6" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="87.6" y="10" width="69.6" height="64" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="122.39999999999999" y="32.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Works</text><text x="122.39999999999999" y="46.0" text-anchor="middle" font-size="11" fill="#1d2a3a">only in</text><text x="122.39999999999999" y="60.0" text-anchor="middle" font-size="11" fill="#1d2a3a">its area</text><line x1="158.2" y1="42" x2="174.2" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="175.2" y="10" width="69.6" height="64" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="32.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Runs</text><text x="210.0" y="46.0" text-anchor="middle" font-size="11" fill="#1d2a3a">checks</text><text x="210.0" y="60.0" text-anchor="middle" font-size="11" fill="#1d2a3a">locally</text><line x1="245.79999999999998" y1="42" x2="261.79999999999995" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="262.79999999999995" y="10" width="69.6" height="64" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="297.59999999999997" y="32.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Merge</text><text x="297.59999999999997" y="46.0" text-anchor="middle" font-size="11" fill="#1d2a3a">with</text><text x="297.59999999999997" y="60.0" text-anchor="middle" font-size="11" fill="#1d2a3a">review</text><line x1="333.4" y1="42" x2="349.4" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="350.4" y="10" width="69.6" height="64" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="385.2" y="32.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Contracts</text><text x="385.2" y="46.0" text-anchor="middle" font-size="11" fill="#1d2a3a">re-checked</text><text x="385.2" y="60.0" text-anchor="middle" font-size="11" fill="#1d2a3a">on merge</text></svg></figure>
+<figcaption>Figure 5.2: Isolated parallel work with a single integration point.</figcaption>
+
+<div class="callout"><b>Practical tip</b><p>Put the ownership map in the instruction file as a simple table: area, folders, owner. Agents follow it remarkably well once it's written down, and tell you when a task requires stepping outside their area.</p></div>
+</section>
+
+<section class="chapter" id="ch7" data-num="Chapter 6">
+<div class="num">Chapter 6</div>
+<h1>Writing Good Contracts</h1>
+<p class="lede">Most contracts are small. The skill is knowing what to put in them, what to leave out, and how to phrase them so neither a human nor an agent can misread them.</p>
+
+<h2>What deserves a contract?</h2>
+<p>Write a contract for anything that is <b>shared</b> and <b>easy to get subtly wrong</b>:</p>
+<ul>
+<li><b>Enumerations:</b> statuses, categories, types, audiences, roles.</li>
+<li><b>Money:</b> unit, currency, rounding, tax inclusion.</li>
+<li><b>Time:</b> timezone, format, what "today" means, inclusive or exclusive ranges.</li>
+<li><b>Identifiers:</b> format, who generates them, whether they're ever reused.</li>
+<li><b>State machines:</b> allowed statuses and allowed transitions between them.</li>
+<li><b>Interfaces:</b> request and response shapes between parts of the system.</li>
+<li><b>Files and naming:</b> where outputs go and what they're called.</li>
+</ul>
+
+<h2>Phrasing rules</h2>
+<table>
+<tr><th>Instead of…</th><th>Write…</th></tr>
+<tr><td>"Use a gender value"</td><td>"EXACTLY one of: women | men | anyone"</td></tr>
+<tr><td>"Store the price"</td><td>"Integer, minor currency units, tax-exclusive"</td></tr>
+<tr><td>"Handle missing values sensibly"</td><td>"If missing or null → treat as anyone"</td></tr>
+<tr><td>"Use the right status"</td><td>"draft → published → archived; no other transitions"</td></tr>
+<tr><td>"Dates in the usual format"</td><td>"ISO 8601, UTC, stored; local only for display"</td></tr>
+</table>
+<p>Capital-letter words like EXACTLY, NEVER and ONLY aren't shouting. They're anchors. Agents give them weight, and human reviewers spot them instantly.</p>
+
+<h2>A state-machine contract</h2>
+<pre>CONTRACT: booking.status
+Values:      enquiry | confirmed | in_progress | completed | cancelled
+Default:     enquiry
+Transitions: enquiry → confirmed | cancelled
+             confirmed → in_progress | cancelled
+             in_progress → completed
+             (no other transitions; completed and cancelled are final)
+Rule:        Only the bookings area may change status.</pre>
+<figure class="dg"><svg viewBox="0 0 420 84" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#c2562b"/></marker></defs><rect x="0.0" y="10" width="91.5" height="64" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="45.75" y="46.0" text-anchor="middle" font-size="11" fill="#1d2a3a">enquiry</text><line x1="92.5" y1="42" x2="108.5" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="109.5" y="10" width="91.5" height="64" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="155.25" y="46.0" text-anchor="middle" font-size="11" fill="#1d2a3a">confirmed</text><line x1="202.0" y1="42" x2="218.0" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="219.0" y="10" width="91.5" height="64" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="264.75" y="46.0" text-anchor="middle" font-size="11" fill="#1d2a3a">in progress</text><line x1="311.5" y1="42" x2="327.5" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="328.5" y="10" width="91.5" height="64" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="374.25" y="46.0" text-anchor="middle" font-size="11" fill="#1d2a3a">completed</text></svg></figure>
+<figcaption>Figure 6.1: A state machine is a contract about movement, not just values. Cancelled is reachable from the first two states only.</figcaption>
+
+<h2>Keep contracts small and boring</h2>
+<p>A contract that tries to describe a whole feature will be ignored or misread. One concept per contract, one screen of text at most. If you find yourself writing paragraphs of reasoning, put the reasoning in the decision log and keep only the rule in the contract.</p>
+
+<div class="callout"><b>Include examples of what's wrong</b><p>Agents learn as much from counter-examples as from rules. One line such as <i>Wrong: "Female", "Ladies", "" (empty string)</i> under an enumeration contract prevents the most likely mistakes before they happen.</p></div>
+</section>
+
+<section class="chapter" id="ch8" data-num="Chapter 7">
+<div class="num">Chapter 7</div>
+<h1>Hand-offs and Integration</h1>
+<p class="lede">Agents work in parallel, but products are used as a whole. The moments where one agent's work meets another's are where contracts earn their keep.</p>
+
+<h2>The hand-off note</h2>
+<p>When an agent finishes a piece of work that others depend on, it should leave a short hand-off note. Not a long report, just the facts the next agent needs.</p>
+<pre>HAND-OFF · Event form (admin portal)
+Done:      Form saves event.audience using contract values.
+Contracts: event-audience (followed), dates (followed)
+Changed:   Added field event.capacity (integer, optional)
+           → proposed new contract: event-capacity.md
+Needs:     Listing screen should show capacity when present.
+Verify:    run "check-contracts" and "test events"</pre>
+
+<h2>Contract-first integration</h2>
+<p>The safest order for building connected features is: <b>contract first, then both sides.</b> Before the form agent and the listing agent start, the shared contract for the data between them is written and agreed. Both agents then build against the same written truth, in parallel, without needing to see each other's code.</p>
+<figure class="dg"><svg viewBox="0 0 420 272" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#c2562b"/></marker></defs><rect x="70" y="4" width="280" height="40" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="28.0" text-anchor="middle" font-size="11" fill="#1d2a3a">1 · Write or update the contract</text><line x1="210" y1="45" x2="210" y2="59" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="70" y="60" width="280" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="84.0" text-anchor="middle" font-size="11" fill="#1d2a3a">2 · Generate shared types from it</text><line x1="210" y1="101" x2="210" y2="115" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="70" y="116" width="280" height="40" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="140.0" text-anchor="middle" font-size="11" fill="#1d2a3a">3 · Agents build both sides in parallel</text><line x1="210" y1="157" x2="210" y2="171" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="70" y="172" width="280" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="196.0" text-anchor="middle" font-size="11" fill="#1d2a3a">4 · Contract checks run on both</text><line x1="210" y1="213" x2="210" y2="227" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="70" y="228" width="280" height="40" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="252.0" text-anchor="middle" font-size="11" fill="#1d2a3a">5 · Integrate and test end to end</text></svg></figure>
+<figcaption>Figure 7.1: Contract-first integration lets parallel agents meet in the middle without surprises.</figcaption>
+
+<h2>Read, don't assume</h2>
+<p>The "confident integration" failure from Chapter 2 has a simple remedy built into every agent's brief: <i>before using any part of the system you don't own, read its contract or its code, and never assume a name, field or endpoint exists.</i> It sounds obvious. Writing it down measurably reduced invented references in my projects.</p>
+
+<h2>A coordinating agent</h2>
+<p>For larger efforts, one agent (or a person) can play the coordinator role. It breaks work into tasks per area, makes sure the contracts exist first, hands tasks to specialist agents, collects their hand-off notes, and runs the integration checks. The coordinator doesn't write feature code. It protects the seams.</p>
+<figure class="dg"><svg viewBox="0 0 420 260" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#c2562b"/></marker></defs><line x1="210.0" y1="130.0" x2="210.0" y2="35.0" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="158.0" y="15.0" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="32.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Writes</text><text x="210.0" y="46.0" text-anchor="middle" font-size="11" fill="#1d2a3a">contracts first</text><line x1="210.0" y1="130.0" x2="357.4137600257488" y2="100.64338553438" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="305.4137600257488" y="80.64338553438" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="357.4137600257488" y="97.64338553438" text-anchor="middle" font-size="11" fill="#1d2a3a">Assigns tasks</text><text x="357.4137600257488" y="111.64338553438" text-anchor="middle" font-size="11" fill="#1d2a3a">by area</text><line x1="210.0" y1="130.0" x2="301.10671410533337" y2="206.85661446562" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="249.10671410533337" y="186.85661446562" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="301.10671410533337" y="203.85661446562" text-anchor="middle" font-size="11" fill="#1d2a3a">Collects</text><text x="301.10671410533337" y="217.85661446562" text-anchor="middle" font-size="11" fill="#1d2a3a">hand-offs</text><line x1="210.0" y1="130.0" x2="118.89328589466668" y2="206.85661446562" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="66.89328589466668" y="186.85661446562" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="118.89328589466668" y="196.85661446562" text-anchor="middle" font-size="11" fill="#1d2a3a">Runs</text><text x="118.89328589466668" y="210.85661446562" text-anchor="middle" font-size="11" fill="#1d2a3a">integration</text><text x="118.89328589466668" y="224.85661446562" text-anchor="middle" font-size="11" fill="#1d2a3a">checks</text><line x1="210.0" y1="130.0" x2="62.586239974251185" y2="100.64338553438" stroke="#c2562b" stroke-width="1.4" stroke-dasharray="4 3"/><rect x="10.586239974251185" y="80.64338553438" width="104" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="62.586239974251185" y="97.64338553438" text-anchor="middle" font-size="11" fill="#1d2a3a">Updates</text><text x="62.586239974251185" y="111.64338553438" text-anchor="middle" font-size="11" fill="#1d2a3a">decision log</text><rect x="148.0" y="104.0" width="124" height="52" rx="8" fill="#1d2a3a" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="134.0" text-anchor="middle" font-size="11" fill="#fff">Coordinator</text></svg></figure>
+<figcaption>Figure 7.2: The coordinator's job is the seams, not the features.</figcaption>
+</section>
+
+<section class="chapter" id="ch9" data-num="Chapter 8">
+<div class="num">Chapter 8</div>
+<h1>Making Contracts Enforce Themselves</h1>
+<p class="lede">A written contract prevents most drift. An automatically checked contract prevents nearly all of it, including drift you would never have noticed.</p>
+
+<h2>Four layers of enforcement</h2>
+<figure class="dg"><svg viewBox="0 0 420 216" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#c2562b"/></marker></defs><rect x="70" y="4" width="280" height="40" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="21.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Layer 1 · Shared type: the code itself</text><text x="210.0" y="35.0" text-anchor="middle" font-size="11" fill="#1d2a3a">only allows contract values</text><line x1="210" y1="45" x2="210" y2="59" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="70" y="60" width="280" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="77.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Layer 2 · Validation: bad data is</text><text x="210.0" y="91.0" text-anchor="middle" font-size="11" fill="#1d2a3a">rejected at the boundary</text><line x1="210" y1="101" x2="210" y2="115" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="70" y="116" width="280" height="40" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="133.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Layer 3 · Tests: contract behaviour is</text><text x="210.0" y="147.0" text-anchor="middle" font-size="11" fill="#1d2a3a">tested, including defaults</text><line x1="210" y1="157" x2="210" y2="171" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="70" y="172" width="280" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="189.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Layer 4 · Checks on merge: nothing</text><text x="210.0" y="203.0" text-anchor="middle" font-size="11" fill="#1d2a3a">merges if a contract breaks</text></svg></figure>
+<figcaption>Figure 8.1: Each layer catches what the one above missed.</figcaption>
+
+<h3>Layer 1: Shared types</h3>
+<p>Turn every enumeration contract into a single shared type or constant that all areas import. When an agent tries to write "Female", the code doesn't compile. This is the cheapest and most powerful layer.</p>
+<pre>// contracts/eventAudience.ts — the only definition, imported everywhere
+export const AUDIENCE = ["women", "men", "anyone"] as const;
+export type Audience = typeof AUDIENCE[number];
+export const DEFAULT_AUDIENCE: Audience = "anyone";
+
+export function normalizeAudience(v: unknown): Audience {
+  return AUDIENCE.includes(v as Audience) ? (v as Audience)
+                                          : DEFAULT_AUDIENCE;
+}</pre>
+
+<h3>Layer 2: Validation at the boundary</h3>
+<p>Where data enters the system (forms, APIs, imports), validate against the contract and reject or normalize anything outside it. Old data and external sources are where contract violations hide.</p>
+
+<h3>Layer 3: Contract tests</h3>
+<p>Write small tests that state the contract as behaviour: only these values are accepted, missing becomes the default, the display mapping covers every value, and the state machine refuses illegal transitions. Agents are very good at writing these tests once they've seen the contract file.</p>
+<pre>test("audience defaults to anyone", () =&gt; {
+  expect(normalizeAudience(undefined)).toBe("anyone");
+  expect(normalizeAudience("Female")).toBe("anyone");
+});
+test("every audience value has a display label", () =&gt; {
+  for (const a of AUDIENCE) expect(LABELS[a]).toBeTruthy();
+});</pre>
+
+<h3>Layer 4: Checks on merge</h3>
+<p>Run the build, type checks and contract tests automatically before any agent's work is merged. If a contract breaks, the merge stops. The agent gets a precise error, and in my experience it usually fixes the problem on its own within one attempt.</p>
+
+<div class="callout"><b>A simple sweep check</b><p>A small script that searches the codebase for raw string values that should come from a contract, such as a stray "female" or "Cancelled", catches drift that types miss, especially in templates, queries and configuration files.</p></div>
+
+<h2>Migrating old data</h2>
+<p>When a contract is introduced after data already exists, as in the opening story, write a one-time migration that maps every old variant to the new values ("Female", "Ladies", "F" → "women"; empty → "anyone"). Then add validation so old variants can't return. Record the migration in the decision log.</p>
+</section>
+
+<section class="chapter" id="ch10" data-num="Chapter 9">
+<div class="num">Chapter 9</div>
+<h1>Case Walkthrough: One Field, Three Spellings</h1>
+<p class="lede">Here is the opening story, generalized, step by step: what broke, how it was found, and how the contract approach fixed it for good.</p>
+
+<h2>The setup</h2>
+<p>A product had events that could be intended for a specific audience. Three agents worked in parallel. One built the event-creation form in an admin portal, one built the public listing with filters, and one built operator reports.</p>
+
+<h2>What happened</h2>
+<table>
+<tr><th>Area</th><th>Value written or expected</th><th>Effect</th></tr>
+<tr><td>Event form</td><td>Saved the display label, e.g. "Female"</td><td>Data stored as labels</td></tr>
+<tr><td>Listing filters</td><td>Filtered on "women"</td><td>Filtered events never appeared</td></tr>
+<tr><td>Reports</td><td>Treated missing as excluded</td><td>Older events undercounted</td></tr>
+</table>
+<p>No errors and no crashes. The symptom reported was vague ("the filter seems broken sometimes"), which is exactly how contract drift usually shows up.</p>
+
+<h2>Diagnosis</h2>
+<p>A search for every place the field was read or written showed three vocabularies and two different assumptions about missing values. The root cause wasn't a bug in any single area. It was the <em>absence of an agreement</em> between them.</p>
+
+<h2>The fix, in order</h2>
+<figure class="dg"><svg viewBox="0 0 420 328" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#c2562b"/></marker></defs><rect x="70" y="4" width="280" height="40" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="21.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Write the contract: 3 exact values +</text><text x="210.0" y="35.0" text-anchor="middle" font-size="11" fill="#1d2a3a">default</text><line x1="210" y1="45" x2="210" y2="59" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="70" y="60" width="280" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="84.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Create the shared type and normalizer</text><line x1="210" y1="101" x2="210" y2="115" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="70" y="116" width="280" height="40" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="140.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Migrate old data to the new values</text><line x1="210" y1="157" x2="210" y2="171" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="70" y="172" width="280" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="189.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Update all three areas to import the</text><text x="210.0" y="203.0" text-anchor="middle" font-size="11" fill="#1d2a3a">shared type</text><line x1="210" y1="213" x2="210" y2="227" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="70" y="228" width="280" height="40" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="252.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Add contract tests + merge check</text><line x1="210" y1="269" x2="210" y2="283" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="70" y="284" width="280" height="40" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="301.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Log the decision; link it from the</text><text x="210.0" y="315.0" text-anchor="middle" font-size="11" fill="#1d2a3a">instruction file</text></svg></figure>
+<figcaption>Figure 9.1: The six-step fix. Steps 2 and 5 are what stop it from ever returning.</figcaption>
+
+<h2>The outcome</h2>
+<ul>
+<li>Filters and reports agreed immediately after migration.</li>
+<li>Later agents working on new screens used the shared type without being told. The instruction file pointed them to it.</li>
+<li>An attempt weeks later to add a fourth value went through a contract change instead of quietly slipping in.</li>
+</ul>
+<div class="callout"><b>The general lesson</b><p>When agents disagree, don't fix the symptom in whichever area is broken. Find the shared concept, write the contract, make it enforceable, and point every agent at it. Fixing one area just moves the disagreement somewhere else.</p></div>
+</section>
+
+<section class="chapter" id="ch11" data-num="Chapter 10">
+<div class="num">Chapter 10</div>
+<h1>Changing a Contract Safely</h1>
+<p class="lede">Contracts aren't frozen. Products evolve and contracts must follow, but through a visible process rather than a quiet edit.</p>
+
+<h2>The change process</h2>
+<figure class="dg"><svg viewBox="0 0 420 84" xmlns="http://www.w3.org/2000/svg"><defs><marker id="ah" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 z" fill="#c2562b"/></marker></defs><rect x="0.0" y="10" width="69.6" height="64" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="34.8" y="39.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Propose</text><text x="34.8" y="53.0" text-anchor="middle" font-size="11" fill="#1d2a3a">change</text><line x1="70.6" y1="42" x2="86.6" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="87.6" y="10" width="69.6" height="64" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="122.39999999999999" y="25.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Owner</text><text x="122.39999999999999" y="39.0" text-anchor="middle" font-size="11" fill="#1d2a3a">reviews;</text><text x="122.39999999999999" y="53.0" text-anchor="middle" font-size="11" fill="#1d2a3a">users</text><text x="122.39999999999999" y="67.0" text-anchor="middle" font-size="11" fill="#1d2a3a">listed</text><line x1="158.2" y1="42" x2="174.2" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="175.2" y="10" width="69.6" height="64" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="210.0" y="32.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Update</text><text x="210.0" y="46.0" text-anchor="middle" font-size="11" fill="#1d2a3a">contract</text><text x="210.0" y="60.0" text-anchor="middle" font-size="11" fill="#1d2a3a">+ type</text><line x1="245.79999999999998" y1="42" x2="261.79999999999995" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="262.79999999999995" y="10" width="69.6" height="64" rx="8" fill="#fff" stroke="#1d2a3a" stroke-width="1.4"/><text x="297.59999999999997" y="25.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Migrate</text><text x="297.59999999999997" y="39.0" text-anchor="middle" font-size="11" fill="#1d2a3a">data;</text><text x="297.59999999999997" y="53.0" text-anchor="middle" font-size="11" fill="#1d2a3a">update</text><text x="297.59999999999997" y="67.0" text-anchor="middle" font-size="11" fill="#1d2a3a">users</text><line x1="333.4" y1="42" x2="349.4" y2="42" stroke="#c2562b" stroke-width="1.8" marker-end="url(#ah)"/><rect x="350.4" y="10" width="69.6" height="64" rx="8" fill="#f4ece2" stroke="#1d2a3a" stroke-width="1.4"/><text x="385.2" y="32.0" text-anchor="middle" font-size="11" fill="#1d2a3a">Checks</text><text x="385.2" y="46.0" text-anchor="middle" font-size="11" fill="#1d2a3a">pass; log</text><text x="385.2" y="60.0" text-anchor="middle" font-size="11" fill="#1d2a3a">decision</text></svg></figure>
+<figcaption>Figure 10.1: A contract change touches every user at once, never one at a time.</figcaption>
+
+<h2>Additive vs breaking changes</h2>
+<table>
+<tr><th>Change</th><th>Type</th><th>What's needed</th></tr>
+<tr><td>Add a new optional field</td><td>Additive</td><td>Update contract and type; users may ignore it</td></tr>
+<tr><td>Add a new enumeration value</td><td>Usually breaking</td><td>Every user must handle it (filters, labels, reports)</td></tr>
+<tr><td>Rename a value or field</td><td>Breaking</td><td>Migration + update all users in one change</td></tr>
+<tr><td>Change a default</td><td>Breaking, often silently</td><td>Explicit review of every place "missing" occurs</td></tr>
+</table>
+<p>Adding a value to an enumeration feels harmless and is one of the most common sources of silent breakage. A display mapping without the new label, or a filter that doesn't know it, will quietly misbehave. Contract tests like "every value has a label" catch exactly this.</p>
+
+<h2>Let agents propose, not decide</h2>
+<p>Agents will regularly run into a contract that doesn't fit what they're building. That's healthy. The rule in their brief should be: <i>if a contract blocks you, stop and write a proposal; do not work around it.</i> In practice agents follow this well, and the proposals are often good. They are, after all, the ones closest to the code.</p>
+</section>
+
+<section class="chapter" id="ch12" data-num="Chapter 11">
+<div class="num">Chapter 11</div>
+<h1>The Playbook</h1>
+<p class="lede">Everything in this book, as a sequence you can follow on your next multi-agent project.</p>
+
+<h2>Before agents start</h2>
+<ul class="check">
+<li>Write a 1–2 page instruction file at the project root.</li>
+<li>Draw the ownership map: areas, folders, owners.</li>
+<li>List the shared concepts and write a contract for each risky one.</li>
+<li>Turn enumeration contracts into shared types.</li>
+<li>Create the decision log.</li>
+<li>Set up automatic checks: build, types, contract tests.</li>
+</ul>
+<h2>During work</h2>
+<ul class="check">
+<li>One agent per area, ideally in an isolated working copy.</li>
+<li>Contract first for any feature that crosses areas.</li>
+<li>Agents read contracts before using anything they don't own.</li>
+<li>Requests across areas go to owners, not direct edits.</li>
+<li>Every session ends with a hand-off note and decision-log entries.</li>
+</ul>
+<h2>At integration</h2>
+<ul class="check">
+<li>All checks pass before merge.</li>
+<li>Run a sweep for raw values that bypass contracts.</li>
+<li>Test end to end across the areas that meet.</li>
+<li>Update the contracts index if anything changed.</li>
+</ul>
+
+<h2>Agent brief snippet</h2>
+<pre>## Working in this project
+- Read /AGENTS.md first, then every contract for data you touch.
+- Edit ONLY files in your area: [area, folders].
+- Use shared types from /contracts. NEVER hard-code their values.
+- If a contract blocks you: STOP and write a proposal in
+  /docs/proposals/. Do not work around it.
+- Never assume a field, endpoint or file exists. Read it first.
+- Before finishing: run checks, write a hand-off note, add any
+  cross-area decision to /docs/decisions.md.</pre>
+
+<p class="quote">"Agents don't need more intelligence to work together. They need the same thing people do: shared, written agreements."</p>
+</section>
+
+<section class="chapter" id="ch13" data-num="Appendix">
+<div class="num">Appendix</div>
+<h1>Contract Template and Glossary</h1>
+<h2>Contract template</h2>
+<pre>CONTRACT: [domain.concept]
+Owner:      [area or person]
+Used by:    [list of areas]
+Values / shape:
+            [EXACTLY ... | type and units | structure]
+Default:    [what missing / null / unknown means]
+Display:    [labels, if any; never stored]
+Rules:      [store vs display; who may change; transitions]
+Wrong:      [common incorrect values or shapes]
+Checked by: [shared type | validation | tests | merge check]
+History:    [date — change — reason]</pre>
+
+<h2>Glossary</h2>
+<table>
+<tr><th>Term</th><th>Meaning</th></tr>
+<tr><td>Cross-agent contract</td><td>A small, explicit agreement about a concept several agents touch.</td></tr>
+<tr><td>Instruction file</td><td>The project-level document every agent reads at session start.</td></tr>
+<tr><td>Shared type</td><td>A single code definition of a contract, imported by every area.</td></tr>
+<tr><td>Drift</td><td>Gradual divergence in names, values or assumptions between agents.</td></tr>
+<tr><td>Ownership map</td><td>The table of areas, folders and their single owner.</td></tr>
+<tr><td>Hand-off note</td><td>A short summary an agent leaves for those who depend on its work.</td></tr>
+<tr><td>Decision log</td><td>Dated, one-line record of choices that affect more than one area.</td></tr>
+<tr><td>Coordinator</td><td>An agent or person who protects the seams between areas.</td></tr>
+<tr><td>Migration</td><td>A one-time change that brings old data in line with a contract.</td></tr>
+</table>
+</section>
+
+<section class="about"><h2>About the Author</h2><p><b>Sparsh Jain</b> is an AI engineer who builds software products with teams of AI coding agents working side by side, across web apps, admin portals, document systems and automation pipelines.</p><p>His work focuses on the coordination problem: how to keep many fast, capable, forgetful agents aligned on one product. This book collects the patterns that held up in real projects.</p><p>If it saved you one broken build, pass it to the next engineer who says "just let the agents figure it out".</p></section>
+</body></html>
